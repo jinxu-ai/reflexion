@@ -1,6 +1,9 @@
 # import openai API - completion (generate text)
 from utils import get_completion
 
+# ollama - generate text 
+from redo_test.chat_test import ollama_generate
+
 from typing import List, Dict, Any
 
 with open("./reflexion_few_shot_examples.txt", 'r') as f:
@@ -11,7 +14,9 @@ def _get_scenario(s: str) -> str:
     return s.split("Here is the task:")[-1].strip()
 
 def _generate_reflection_query(log_str: str, memory: List[str]) -> str:
-    """Allows the Agent to reflect upon a past experience."""
+    """
+    Allows the Agent to reflect upon a past experience.
+    """
     scenario: str = _get_scenario(log_str)
     query: str = f"""You will be given the history of a past experience in which you were placed in an environment and given a task to complete. You were unsuccessful in completing the task. Do not summarize your environment, but rather think about the strategy and path you took to attempt to complete the task. Devise a concise, new plan of action that accounts for your mistake with reference to specific actions that you should have taken. For example, if you tried A and B but forgot C, then devise a plan to achieve C with environment-specific actions. You will need this later when you are solving the same task. Give your plan after "Plan". Here are two examples:
 
@@ -42,7 +47,10 @@ def update_memory(trial_log_path: str, env_configs: List[Dict[str, Any]]) -> Lis
             else:
                 memory: List[str] = env['memory']
             reflection_query: str = _generate_reflection_query(env_logs[i], memory)
+
+            # replace get_completion with ollama_generate
             reflection: str = get_completion(reflection_query) # type: ignore
+            # reflection: str = ollama_generate("llama3.2",reflection_query)
             env_configs[i]['memory'] += [reflection]
                 
     return env_configs
