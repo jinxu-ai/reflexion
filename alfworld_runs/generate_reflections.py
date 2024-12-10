@@ -1,3 +1,4 @@
+# import openai API - completion (generate text)
 from utils import get_completion
 
 from typing import List, Dict, Any
