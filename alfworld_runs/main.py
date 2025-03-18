@@ -7,6 +7,9 @@ from generate_reflections import update_memory
 
 from typing import Any, List, Dict
 
+
+# add arg parameters 
+# eg. main.py --num_trials 10
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_trials", type=int, help="The number of trials to run")
@@ -26,6 +29,9 @@ def get_args():
     return args
 
 def main(args) -> None:
+    # default value: True?/ set as True when run the main file?
+    # if the program is resumed, use the resume directory as the logging directory
+    #   and if the os path does not exists, rasie an error
     if args.is_resume:
         if not os.path.exists(args.resume_dir):
             raise ValueError(f"Resume directory `{args.resume_dir}` does not exist")
