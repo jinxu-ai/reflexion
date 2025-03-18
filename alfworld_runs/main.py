@@ -38,6 +38,8 @@ def main(args) -> None:
         with open(env_config_path, 'r') as rf:
             env_configs: List[Dict[str, Any]] = json.load(rf)
     else:
+        # first run - create directory
+        
         # Create the run directory
         if not os.path.exists(args.run_name):
             os.makedirs(args.run_name)
@@ -90,6 +92,9 @@ def main(args) -> None:
 
         # set paths to log files
         trial_log_path: str = os.path.join(args.run_name, f'trial_{trial_idx}.log')
+
+        # =============================================================================================================================================================================
+        # json file missing 
         trial_env_configs_log_path: str = os.path.join(args.run_name, f'env_results_trial_{trial_idx}.json')
         if os.path.exists(trial_log_path):
             open(trial_log_path, 'w').close()
@@ -97,7 +102,11 @@ def main(args) -> None:
             open(trial_env_configs_log_path, 'w').close()
 
         # run trial
+        print(f"Running trial {trial_idx}...")
+        
         run_trial(trial_log_path, world_log_path, trial_idx, env_configs, args.use_memory, args.model)
+
+        print(f"Trial {trial_idx} completed successfully.")
 
         # update memory if needed
         if args.use_memory:
